@@ -36,7 +36,16 @@ class Person::HistoryController < ApplicationController
   end
 
   def entry
-    @person ||= group.people.find(params[:id])
+    @person ||= fetch_person
+  end
+
+  def fetch_person
+    if current_user.roles.present? 
+      group.people.find(params[:id])
+    else
+      group
+      Person.find(params[:id])
+    end
   end
 
   def group
